@@ -33,3 +33,34 @@ function buildTable(data) {
     });
   }
 
+  // the next function will filter the html table data upon mouseclick
+  function handleClick() {
+    let date = d3.select("#datetime").property("value");
+    // the 'select' function will select the first element that matches our selector string '#datetime'
+    // for example, 'd3.select(#datetime)' tells d3 to look for the #datetime id in the html tags. We
+    // have not yet created our html, but we know the date value will be nested between 'datetime' tags
+    // by chaining 'property("value")' to the d3.select() function, we are telling d3 to not only look
+    // for where the date values are stored, but also to store that information in the 'date' variable
+    let filteredData = tableData;
+    // here, we use our raw data variable as the filter for our date search. If no date has been entered
+    // as a filter, the search will basically return all the data
+
+    // now we want to introduce an if statement, to indicate when a date is entered into the filter
+    if (date) {
+    // if a date is entered,
+        filteredData = filteredData.filter(row => row.datetime === date);
+        // filter the raw data to show only the date entered
+    };
+    
+    //now we can call our 'buildTable' function on the filtered data
+    buildTable(filteredData);
+  }
+
+  d3.selectAll("#filter-btn").on("click", handleClick);
+  // when we construct the html, we will assign a unique identifier to the '#filter-btn' element. So 
+  // we include it here to link our code directly to the button. Also, by adding 'on(...)', we're telling
+  // d3 to execute the 'handleClick' function when the button of id '#filter-btn' is clicked
+
+  buildTable(tableData);
+  // before constructing the html, we will call the 'buildTable' function again using the originally 
+  // imported data. This will allow users to view the initial table before making a date inquiry
